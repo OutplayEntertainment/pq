@@ -89,6 +89,13 @@ type Dialer interface {
 	DialTimeout(network, address string, timeout time.Duration) (net.Conn, error)
 }
 
+/*RegisterDialer - registers a custom dialer to establish TCP connections to database */
+func RegisterDialer(d Dialer) {
+	customDialer = d
+}
+
+var customDialer Dialer
+
 type defaultDialer struct{}
 
 func (d defaultDialer) Dial(ntw, addr string) (net.Conn, error) {
@@ -248,6 +255,9 @@ func (cn *conn) writeBuf(b byte) *writeBuf {
 // Most users should only use it through database/sql package from the standard
 // library.
 func Open(name string) (_ driver.Conn, err error) {
+	if customDialer != nil {
+		return DialOpen(customDialer, name)
+	}
 	return DialOpen(defaultDialer{}, name)
 }
 
