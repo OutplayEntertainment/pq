@@ -317,13 +317,13 @@ func DialOpen(d Dialer, name string) (_ driver.Conn, err error) {
 	// If a user is not provided by any other means, the last
 	// resort is to use the current operating system provided user
 	// name.
-	if _, ok := o["user"]; !ok {
-		u, err := userCurrent()
-		if err != nil {
-			return nil, err
-		}
-		o["user"] = u
-	}
+	// if _, ok := o["user"]; !ok {
+	// 	u, err := userCurrent()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	o["user"] = u
+	// }
 
 	cn := &conn{
 		opts:   o,
